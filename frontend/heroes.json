@@ -5,24 +5,6 @@
       "name": "Nikita Torbinskiy",
       "description": "234",
       "element": "wind"
-    },
-    {
-      "id": "99d8d1be-4bf1-4bdb-b96c-094cddd4d1ac",
-      "name": "Петя",
-      "description": "играть",
-      "element": "wind"
-    },
-    {
-      "id": "b4489de8-9c82-49af-ad31-e6f9094f86bf",
-      "name": "ошибка природы",
-      "description": "кирилл ",
-      "element": "water"
-    },
-    {
-      "id": "6ad44415-7818-4be1-bc39-1fcead08eedb",
-      "name": "Nikita Torbinskiy",
-      "description": "234",
-      "element": "fire"
     }
   ],
   "filters": [
