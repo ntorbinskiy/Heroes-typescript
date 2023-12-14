@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { heroCreated } from "../../actions";
 
 export interface Hero {
-  readonly id: string;
+  readonly id: number;
   readonly name: string;
   readonly description: string;
   readonly element: string;
@@ -27,7 +27,7 @@ const HeroesAddForm = () => {
     // хотел показать вам чуть нагляднее
     // Генерация id через библиотеку
     const newHero: Hero = {
-      id: uuidv4(),
+      id: Number(uuidv4()),
       name: heroName,
       description: heroDescr,
       element: heroElement,
