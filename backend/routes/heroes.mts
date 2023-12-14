@@ -46,7 +46,6 @@ router.post("/create", async (req, res) => {
   res.send(result).status(200);
 });
 
-// Delete an entry
 router.delete("/delete/:id", async (req, res) => {
   const query = { _id: new ObjectId(req.params.id) };
 
@@ -55,12 +54,12 @@ router.delete("/delete/:id", async (req, res) => {
   res.send(result).status(200);
 });
 
-router.delete("/delete-many/:id", async (req, res) => {
-  const query = { _id: new ObjectId(req.params.id) };
+// router.delete("/delete-many/:id", async (req, res) => {
+//   const query = { _id: new ObjectId(req.params.id) };
 
-  const collection = await db.collection("heroes");
-  const result = await collection.deleteOne(query);
-  res.send(result).status(200);
-});
+//   const collection = await db.collection("heroes");
+//   const result = await collection.deleteOne(query);
+//   res.send(result).status(200);
+// });
 
 export default router;
