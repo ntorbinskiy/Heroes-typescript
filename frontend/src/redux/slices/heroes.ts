@@ -52,9 +52,13 @@ const heroesSlice = createSlice({
       ...state,
       heroes: state.heroes.filter((item) => item.id !== action.payload),
     }),
+    addHeroes: (state, action: PayloadAction<Hero[]>) => ({
+      ...state,
+      heroes: action.payload,
+    }),
   },
 });
 
-export const { heroCreated, heroDeleted } = heroesSlice.actions;
+export const { heroCreated, heroDeleted, addHeroes } = heroesSlice.actions;
 
 export default heroesSlice.reducer;

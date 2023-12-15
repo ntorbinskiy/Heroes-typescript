@@ -25,7 +25,8 @@ const HeroesAddForm = () => {
 
   const dispatch = useAppDispatch();
 
-  const onSubmitHandler: FormEventHandler = () => {
+  const onSubmitHandler: FormEventHandler = (e) => {
+    e.preventDefault();
     const newHero: Hero = {
       id: Number(v4()),
       name: heroName,
@@ -43,7 +44,10 @@ const HeroesAddForm = () => {
     setHeroElement("");
   };
 
-  const renderFilters = (filters: Filter[], status: Loading) => {
+  const renderFilters = (
+    filters: Filter[],
+    status: Loading
+  ): JSX.Element | JSX.Element[] => {
     if (status === "loading") {
       return <option>Loading elements...</option>;
     } else if (status === "error") {
@@ -52,7 +56,7 @@ const HeroesAddForm = () => {
 
     if (filters && filters.length > 0) {
       return filters.map(({ name, label }) => {
-        if (name === "all") return;
+        if (name === "all") return <></>;
 
         return (
           <option key={name} value={name}>
@@ -61,6 +65,8 @@ const HeroesAddForm = () => {
         );
       });
     }
+
+    return <></>;
   };
 
   return (

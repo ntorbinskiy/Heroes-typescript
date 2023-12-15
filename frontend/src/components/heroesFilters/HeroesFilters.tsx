@@ -4,8 +4,9 @@ import "./HeroesFilter.css";
 import Spinner from "../spinner/Spinner";
 import { Filter, activeFilterChanged } from "../../redux/slices/filters";
 import { useAppDispatch, useAppSelector } from "../../redux/types";
+import { FC } from "react";
 
-const HeroesFilters = () => {
+const HeroesFilters: FC = () => {
   const { filters, filtersLoadingStatus, activeFilter } = useAppSelector(
     (state) => state.filters
   );
@@ -17,7 +18,9 @@ const HeroesFilters = () => {
     return <h5 className="text-center mt-5">Loading error</h5>;
   }
 
-  const renderFilters = (filtersArray: Filter[]) => {
+  const renderFilters = (
+    filtersArray: Filter[]
+  ): JSX.Element | JSX.Element[] => {
     // TODO : think about improvements of this code
     if (filtersArray.length === 0) {
       return <h5 className="text-center mt-5">Filters weren't found</h5>;

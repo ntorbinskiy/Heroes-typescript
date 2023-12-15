@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Loading } from "./heroes";
 
-type FilterName = "all" | "fire" | "water" | "wind" | "earth";
+export type FilterName = "all" | "fire" | "water" | "wind" | "earth";
 
 export interface Filter {
   name: FilterName;

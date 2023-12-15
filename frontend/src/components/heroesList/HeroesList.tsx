@@ -1,30 +1,59 @@
-import { useCallback } from "react";
-import { useAppDispatch, useAppDispatch } from "react-redux";
+import { FC, useCallback, useEffect } from "react";
+
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import { heroDeleted } from "../../actions";
+
 import HeroesListItem from "../heroesListItem/HeroesListItem";
-import { createSelector } from "reselect";
+
 import Spinner from "../spinner/Spinner";
 
 import "./HeroesList.scss";
 import { Hero } from "../heroesAddForm/HeroesAddForm";
+import { useAppDispatch, useAppSelector } from "../../redux/types";
+import { addHeroes, heroDeleted } from "../../redux/slices/heroes";
+import axios from "axios";
+import { FilterName } from "../../redux/slices/filters";
 
-const HeroesList = () => {
-  const filteredHeroesSelector = createSelector(
-    (state) => state.filters.activeFilter,
-    (state) => state.heroes.heroes,
-    (filter, heroes) => {
-      if (filter === "all") {
-        return heroes;
-      } else {
-        return heroes.filter((item) => item.element === filter);
-      }
-    }
+const HeroesList: FC = () => {
+  //   const filteredHeroesSelector = createSelector(
+  //     (state) => state.filters.activeFilter,
+  //     (state) => state.heroes.heroes,
+  //     (filter, heroes) => {
+  //       if (filter === "all") {
+  //         return heroes;
+  //       } else {
+  //         return heroes.filter((item) => item.element === filter);
+  //       }
+  //     }
+  //   );
+  //   const filteredHeroes = useAppDispatch(filteredHeroesSelector);
+  const activeFilter = useAppSelector((state) => state.filters.activeFilter);
+
+  useEffect(() => {
+    const getAndFilterHeroes = async (filter: FilterName): Promise<void> => {
+      const { data } = await axios.get<Hero[]>("http://localhost:5050/heroes");
+
+      const heroesAxios = data.filter((hero) => {
+        if (filter === "all") {
+          return true;
+        }
+
+        if (hero.element === filter) {
+          return true;
+        }
+
+        return false;
+      });
+
+      dispatch(addHeroes(heroesAxios));
+    };
+
+    getAndFilterHeroes(activeFilter);
+  }, []);
+
+  const { heroes, heroesLoadingStatus } = useAppSelector(
+    (state) => state.heroes
   );
-  const filteredHeroes = useAppDispatch(filteredHeroesSelector);
-  const heroesLoadingStatus = useAppDispatch(
-    (state) => state.heroes.heroesLoadingStatus
-  );
+
   const dispatch = useAppDispatch();
 
   const onDelete = useCallback(
@@ -40,7 +69,7 @@ const HeroesList = () => {
     return <h5 className="text-center mt-5">Loading error!</h5>;
   }
 
-  const renderHeroesList = (arr: Hero[]) => {
+  const renderHeroesList = (arr: Hero[]): JSX.Element | JSX.Element[] => {
     if (arr.length === 0) {
       return (
         <CSSTransition timeout={0} classNames="hero">
@@ -49,16 +78,17 @@ const HeroesList = () => {
       );
     }
 
-    return arr.map(({ id, ...props }) => {
+    return arr.map(({ id, ...props }, index) => {
       return (
-        <CSSTransition key={id} timeout={500} classNames="hero">
+        <CSSTransition key={index} timeout={500} classNames="hero">
           <HeroesListItem {...props} onDelete={() => onDelete(id)} />
         </CSSTransition>
       );
     });
   };
 
-  const elements = renderHeroesList(filteredHeroes);
+  console.log({ heroes });
+  const elements = renderHeroesList(heroes);
   return <TransitionGroup component="ul">{elements}</TransitionGroup>;
 };
 
