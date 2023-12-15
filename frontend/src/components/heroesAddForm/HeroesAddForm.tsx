@@ -1,8 +1,12 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
+import { FormEventHandler, useState } from "react";
 
-import { heroCreated } from "../../actions";
+import { v4 } from "uuid";
+
+import axios from "axios";
+
+import { Loading, heroCreated } from "../../redux/slices/heroes";
+import { useAppDispatch, useAppSelector } from "../../redux/types";
+import { Filter } from "../../redux/slices/filters";
 
 export interface Hero {
   readonly id: number;
@@ -11,48 +15,43 @@ export interface Hero {
   readonly element: string;
 }
 const HeroesAddForm = () => {
-  // Состояния для контроля формы
   const [heroName, setHeroName] = useState("");
-  const [heroDescr, setHeroDescr] = useState("");
+  const [heroDescription, setHeroDescription] = useState("");
   const [heroElement, setHeroElement] = useState("");
 
-  const { filters, filtersLoadingStatus } = useSelector(
+  const { filters, filtersLoadingStatus } = useAppSelector(
     (state) => state.filters
   );
-  const dispatch = useDispatch();
 
-  const onSubmitHandler = (e) => {
-    e.preventDefault();
-    // Можно сделать и одинаковые названия состояний,
-    // хотел показать вам чуть нагляднее
-    // Генерация id через библиотеку
+  const dispatch = useAppDispatch();
+
+  const onSubmitHandler: FormEventHandler = () => {
     const newHero: Hero = {
-      id: Number(uuidv4()),
+      id: Number(v4()),
       name: heroName,
-      description: heroDescr,
+      description: heroDescription,
       element: heroElement,
     };
 
     dispatch(heroCreated(newHero));
+    axios.post(
+      `http://localhost:5050/heroes/create?name=${heroName}&description=${heroDescription}&element=${heroElement}&id=${v4()}`
+    );
 
-    // Очищаем форму после отправки
     setHeroName("");
-    setHeroDescr("");
+    setHeroDescription("");
     setHeroElement("");
   };
 
-  const renderFilters = (filters, status) => {
+  const renderFilters = (filters: Filter[], status: Loading) => {
     if (status === "loading") {
-      return <option>Загрузка элементов</option>;
+      return <option>Loading elements...</option>;
     } else if (status === "error") {
-      return <option>Ошибка загрузки</option>;
+      return <option>Loading error!</option>;
     }
 
-    // Если фильтры есть, то рендерим их
     if (filters && filters.length > 0) {
       return filters.map(({ name, label }) => {
-        // Один из фильтров нам тут не нужен
-        // eslint-disable-next-line
         if (name === "all") return;
 
         return (
@@ -68,7 +67,7 @@ const HeroesAddForm = () => {
     <form className="border p-4 shadow-lg rounded" onSubmit={onSubmitHandler}>
       <div className="mb-3">
         <label htmlFor="name" className="form-label fs-4">
-          Имя нового героя
+          Name of new hero
         </label>
         <input
           required
@@ -76,7 +75,7 @@ const HeroesAddForm = () => {
           name="name"
           className="form-control"
           id="name"
-          placeholder="Как меня зовут?"
+          placeholder="What is my name?"
           value={heroName}
           onChange={(e) => setHeroName(e.target.value)}
         />
@@ -84,23 +83,23 @@ const HeroesAddForm = () => {
 
       <div className="mb-3">
         <label htmlFor="text" className="form-label fs-4">
-          Описание
+          Description
         </label>
         <textarea
           required
           name="text"
           className="form-control"
           id="text"
-          placeholder="Что я умею?"
+          placeholder="What can I do?"
           style={{ height: "130px" }}
-          value={heroDescr}
-          onChange={(e) => setHeroDescr(e.target.value)}
+          value={heroDescription}
+          onChange={(e) => setHeroDescription(e.target.value)}
         />
       </div>
 
       <div className="mb-3">
         <label htmlFor="element" className="form-label">
-          Выбрать элемент героя
+          Choose hero's element
         </label>
         <select
           required
@@ -110,13 +109,13 @@ const HeroesAddForm = () => {
           value={heroElement}
           onChange={(e) => setHeroElement(e.target.value)}
         >
-          <option value="">Я владею элементом...</option>
+          <option value="">I am...</option>
           {renderFilters(filters, filtersLoadingStatus)}
         </select>
       </div>
 
       <button type="submit" className="btn btn-primary">
-        Создать
+        Create
       </button>
     </form>
   );
