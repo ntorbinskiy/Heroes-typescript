@@ -1,4 +1,4 @@
-import { FormEventHandler, useState } from "react";
+import { FC, FormEventHandler, Fragment, useState } from "react";
 
 import { v4 } from "uuid";
 
@@ -14,7 +14,7 @@ export interface Hero {
   readonly description: string;
   readonly element: string;
 }
-const HeroesAddForm = () => {
+const HeroesAddForm: FC = () => {
   const [heroName, setHeroName] = useState("");
   const [heroDescription, setHeroDescription] = useState("");
   const [heroElement, setHeroElement] = useState("");
@@ -28,15 +28,16 @@ const HeroesAddForm = () => {
   const onSubmitHandler: FormEventHandler = (e) => {
     e.preventDefault();
     const newHero: Hero = {
-      id: Number(v4()),
+      id: Date.now(),
       name: heroName,
       description: heroDescription,
       element: heroElement,
     };
 
+    console.log("Hero:", { ...newHero });
     dispatch(heroCreated(newHero));
     axios.post(
-      `http://localhost:5050/heroes/create?name=${heroName}&description=${heroDescription}&element=${heroElement}&id=${v4()}`
+      `http://localhost:5050/heroes/create?name=${newHero.name}&description=${newHero.description}&element=${newHero.element}&id=${newHero.id}`
     );
 
     setHeroName("");
@@ -56,7 +57,7 @@ const HeroesAddForm = () => {
 
     if (filters && filters.length > 0) {
       return filters.map(({ name, label }) => {
-        if (name === "all") return <></>;
+        if (name === "all") return <Fragment key={name}></Fragment>;
 
         return (
           <option key={name} value={name}>

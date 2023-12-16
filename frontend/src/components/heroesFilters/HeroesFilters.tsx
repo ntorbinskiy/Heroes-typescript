@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import "./HeroesFilter.css";
 
-import Spinner from "../spinner/Spinner";
+import Spinner from "../spinner/Spinner.tsx";
 import { Filter, activeFilterChanged } from "../../redux/slices/filters";
 import { useAppDispatch, useAppSelector } from "../../redux/types";
 import { FC } from "react";

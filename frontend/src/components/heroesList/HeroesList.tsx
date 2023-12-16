@@ -4,7 +4,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 
-import Spinner from "../spinner/Spinner";
+import Spinner from "../spinner/Spinner.tsx";
 
 import "./HeroesList.scss";
 import { Hero } from "../heroesAddForm/HeroesAddForm";
@@ -58,6 +58,8 @@ const HeroesList: FC = () => {
 
   const onDelete = useCallback(
     (id: number) => {
+      axios.delete(`http://localhost:5050/heroes/delete/${id}`);
+      console.log(`http://localhost:5050/heroes/delete/${id}`);
       dispatch(heroDeleted(id));
     },
     [dispatch]
@@ -78,10 +80,10 @@ const HeroesList: FC = () => {
       );
     }
 
-    return arr.map(({ id, ...props }, index) => {
+    return arr.map(({ id, ...props }) => {
       return (
-        <CSSTransition key={index} timeout={500} classNames="hero">
-          <HeroesListItem {...props} onDelete={() => onDelete(id)} />
+        <CSSTransition key={id} timeout={500} classNames="hero">
+          <HeroesListItem key={id} {...props} onDelete={() => onDelete(id)} />
         </CSSTransition>
       );
     });
