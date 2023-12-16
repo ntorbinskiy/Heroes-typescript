@@ -48,6 +48,7 @@ const HeroesList: FC = () => {
     };
 
     getAndFilterHeroes(activeFilter);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { heroes, heroesLoadingStatus } = useAppSelector(
@@ -59,7 +60,7 @@ const HeroesList: FC = () => {
   const onDelete = useCallback(
     (id: number) => {
       axios.delete(`http://localhost:5050/heroes/delete/${id}`);
-      console.log(`http://localhost:5050/heroes/delete/${id}`);
+
       dispatch(heroDeleted(id));
     },
     [dispatch]
@@ -89,7 +90,6 @@ const HeroesList: FC = () => {
     });
   };
 
-  console.log({ heroes });
   const elements = renderHeroesList(heroes);
   return <TransitionGroup component="ul">{elements}</TransitionGroup>;
 };

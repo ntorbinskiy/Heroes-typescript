@@ -1,23 +1,25 @@
 import { FC, FormEventHandler, Fragment, useState } from "react";
 
-import { v4 } from "uuid";
-
 import axios from "axios";
 
 import { Loading, heroCreated } from "../../redux/slices/heroes";
 import { useAppDispatch, useAppSelector } from "../../redux/types";
 import { Filter } from "../../redux/slices/filters";
 
+export type Element = "fire" | "water" | "wind" | "earth" | "";
+const ELEMENTS = ["fire", "water", "wind", "earth", ""] as const;
+type ElementKey = (typeof ELEMENTS)[number];
+
 export interface Hero {
   readonly id: number;
   readonly name: string;
   readonly description: string;
-  readonly element: string;
+  readonly element: Element;
 }
 const HeroesAddForm: FC = () => {
   const [heroName, setHeroName] = useState("");
   const [heroDescription, setHeroDescription] = useState("");
-  const [heroElement, setHeroElement] = useState("");
+  const [heroElement, setHeroElement] = useState<Element>("");
 
   const { filters, filtersLoadingStatus } = useAppSelector(
     (state) => state.filters
@@ -34,7 +36,6 @@ const HeroesAddForm: FC = () => {
       element: heroElement,
     };
 
-    console.log("Hero:", { ...newHero });
     dispatch(heroCreated(newHero));
     axios.post(
       `http://localhost:5050/heroes/create?name=${newHero.name}&description=${newHero.description}&element=${newHero.element}&id=${newHero.id}`
@@ -114,7 +115,17 @@ const HeroesAddForm: FC = () => {
           id="element"
           name="element"
           value={heroElement}
-          onChange={(e) => setHeroElement(e.target.value)}
+          onChange={(e) => {
+            const isColorKey = (string: string): string is ElementKey => {
+              return ELEMENTS.includes(string as ElementKey);
+            };
+
+            if (!isColorKey(e.target.value)) {
+              return;
+            }
+
+            setHeroElement(e.target.value);
+          }}
         >
           <option value="">I am...</option>
           {renderFilters(filters, filtersLoadingStatus)}

@@ -1,28 +1,43 @@
+import { FC, useEffect, useState } from "react";
 import img from "../../img/unknown-hero.jpg";
-const HeroesListItem = ({ name, description, element, onDelete }) => {
-  let elementClassName;
+import { Element } from "../heroesAddForm/HeroesAddForm";
 
-  switch (element) {
-    case "fire":
-      elementClassName = "bg-danger bg-gradient";
-      break;
-    case "water":
-      elementClassName = "bg-primary bg-gradient";
-      break;
-    case "wind":
-      elementClassName = "bg-success bg-gradient";
-      break;
-    case "earth":
-      elementClassName = "bg-secondary bg-gradient";
-      break;
-    default:
-      elementClassName = "bg-warning bg-gradient";
-  }
+interface HeroesListItemProps {
+  name: string;
+  description: string;
+  element: Element;
+  onDelete: () => void;
+}
+
+const HeroesListItem: FC<HeroesListItemProps> = ({
+  name,
+  description,
+  element,
+  onDelete,
+}) => {
+  const [className, setClassName] = useState<string>("");
+
+  useEffect(() => {
+    switch (element) {
+      case "fire":
+        break;
+      case "water":
+        setClassName("bg-primary bg-gradient");
+        break;
+      case "wind":
+        setClassName("bg-success bg-gradient");
+        break;
+      case "earth":
+        setClassName("bg-secondary bg-gradient");
+        break;
+
+      default:
+        setClassName("bg-warning bg-gradient");
+    }
+  }, [element]);
 
   return (
-    <li
-      className={`card flex-row mb-4 shadow-lg text-white ${elementClassName}`}
-    >
+    <li className={`card flex-row mb-4 shadow-lg text-white ${className}`}>
       <img
         src={img}
         className="img-fluid w-25 d-inline"
