@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
-    "module": "NodeNext",
+    "module": "es2022",
     "esModuleInterop": true,
     "target": "es2017",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "bundler",
     "sourceMap": true,
     "outDir": "dist",
     "allowImportingTsExtensions": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react-jsx"
+  },
+  "ts-node": {
+    "esm": true
   },
   "lib": ["es2015"]
 }

@@ -17,5 +17,6 @@ module.exports = {
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/explicit-function-return-type": "error",
+    "react-refresh/only-export-components": "off",
   },
 };

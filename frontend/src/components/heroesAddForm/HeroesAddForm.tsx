@@ -16,6 +16,11 @@ export interface Hero {
   readonly description: string;
   readonly element: Element;
 }
+
+export const isElementKey = (string: string): string is ElementKey => {
+  return ELEMENTS.includes(string as ElementKey);
+};
+
 const HeroesAddForm: FC = () => {
   const [heroName, setHeroName] = useState("");
   const [heroDescription, setHeroDescription] = useState("");
@@ -116,11 +121,7 @@ const HeroesAddForm: FC = () => {
           name="element"
           value={heroElement}
           onChange={(e) => {
-            const isColorKey = (string: string): string is ElementKey => {
-              return ELEMENTS.includes(string as ElementKey);
-            };
-
-            if (!isColorKey(e.target.value)) {
+            if (!isElementKey(e.target.value)) {
               return;
             }
 

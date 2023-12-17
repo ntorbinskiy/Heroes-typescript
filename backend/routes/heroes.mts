@@ -1,7 +1,9 @@
-import { Hero } from "./../../frontend/src/components/heroesAddForm/HeroesAddForm.tsx";
+import {
+  Hero,
+  isElementKey,
+} from "./../../frontend/src/components/heroesAddForm/HeroesAddForm.tsx";
 import express, { Response } from "express";
 import db from "../db/conn.mts";
-import { ObjectId } from "mongodb";
 
 interface ParsedQs {
   [key: string]: undefined | string | string[] | ParsedQs | ParsedQs[];
@@ -14,14 +16,13 @@ const validateHero = (hero: ParsedQs, res: Response): Hero => {
     typeof name !== "string" ||
     typeof description !== "string" ||
     typeof element !== "string" ||
-    typeof id !== "string"
+    typeof id !== "string" ||
+    isElementKey(element)
   ) {
     res.send("Error, bad request!").status(400);
 
     return;
   }
-
-  return { name, description, element, id: Number(id) };
 };
 
 const router = express.Router();
