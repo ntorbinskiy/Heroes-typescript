@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import "./loadEnvironment.mts";
-import router from "./routes/heroes.mts";
+import "./loadEnvironment.js";
+import router from "./routes/heroes.js";
 import bodyParser from "body-parser";
 
 const PORT = process.env.PORT || 5050;

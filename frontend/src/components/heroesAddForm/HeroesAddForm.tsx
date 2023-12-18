@@ -6,7 +6,7 @@ import { Loading, heroCreated } from "../../redux/slices/heroes";
 import { useAppDispatch, useAppSelector } from "../../redux/types";
 import { Filter } from "../../redux/slices/filters";
 
-export type Element = "fire" | "water" | "wind" | "earth" | "";
+export type Element = "fire" | "water" | "wind" | "earth" | ""; // TODO: think about npm package for these types
 const ELEMENTS = ["fire", "water", "wind", "earth", ""] as const;
 type ElementKey = (typeof ELEMENTS)[number];
 

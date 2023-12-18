@@ -2,10 +2,12 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.mjs",
   "type": "module",
   "scripts": {
-    "dev": "node --loader ts-node/esm index.mts"
+    "dev": "yarn tsc && nodemon dist/index.js",
+    "tsc": "npx tsc",
+    "clean": "rimraf dist"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.2",
+    "rimraf": "^5.0.5",
     "typescript": "^5.3.3"
   }
 }

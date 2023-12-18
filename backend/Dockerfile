@@ -3,5 +3,6 @@
 FROM node:18-alpine
 WORKDIR /
 COPY . .
-RUN yarn install --production && yarn dev
-EXPOSE 3000
+RUN yarn install --production
+CMD [ "node","dist/index.js" ]
+EXPOSE 5050
